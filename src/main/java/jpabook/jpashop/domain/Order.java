@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
+
 @Entity
 @Table(name = "ORDERS") //DB에 ORDER BY라는 예약어가 있는곳도 있어서, table명을 ORDERS로 지정
 public class Order extends BaseEntity{
@@ -16,11 +19,11 @@ public class Order extends BaseEntity{
     private Long memberId;  //식별자만 가져오기 때문에 참조가 다 끊겨버린다. --> 연관관계 Mappiong이 필요하다 !
     private Member member; //Order에서 find MemberId한 후, Member에서도 찾아오는 것보다 객체 지향적 방법
  */
-    @ManyToOne // 연관관계 매핑으로 dev해보자. 관계를 명시해 주면서 매핑을 한다. Order의 입장에서 Member는 N:1
+    @ManyToOne(fetch = LAZY) // 연관관계 매핑으로 dev해보자. 관계를 명시해 주면서 매핑을 한다. Order의 입장에서 Member는 N:1
     @JoinColumn(name = "MEMBER_ID") //ORDERS table FK
     private Member member;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL) //Order저장 시, 자동으로 Delivery 저장
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
 
@@ -33,7 +36,7 @@ public class Order extends BaseEntity{
             orderItem.setOrder(order);
             em.persist(orderItem);
  */
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //Order생성시, OrderItem 자동 생성
     private List<OrderItem> orderItems = new ArrayList<>();
 
 

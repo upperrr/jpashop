@@ -12,9 +12,12 @@ public class Member extends BaseEntity{
     @Column(name = "MEMBER_ID") //varchar(255) 기본으로 생성 되기에, length를 명시 해주는 것이 좋다.
     private Long Id;
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+
+    @Embedded
+    private Address address;
+//    private String city;
+//    private String street;
+//    private String zipcode;
 
     //TODO Orders : List 가 추가 되었다면? (Member 입장에서 Orders List가 필요하다면 ?)
     // 참조 : 좋은 DB설계는 아님. 모든 객체에 넣으려고 하면 끝이 없다. 관심사의 분리로 끊어내는 것이 중요
@@ -42,27 +45,19 @@ public class Member extends BaseEntity{
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getStreet() {
-        return street;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
